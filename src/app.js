@@ -8,12 +8,12 @@ const { NODE_ENV } = require('./config')
 const authRouter = require('./auth/auth-router')
 //const projectPatternsRouter = require('./project-patterns/project-patterns-router')
 /* const stitchPatternsRouter = require('./stitch-patterns/stitch-patterns-router')
-const myProjectsRouter = require ('./my-projects/my-projects-router')
-const usersRouter = require('./users/users-router') */
+const myProjectsRouter = require ('./my-projects/my-projects-router')*/
+const usersRouter = require('./users/users-router') 
 
 const app = express()
 
-app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
+app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
   skip: () => NODE_ENV === 'test',
 }))
 
@@ -26,10 +26,11 @@ app.use(cors(
 app.use(helmet())
 
 app.use(authRouter)
+app.use(usersRouter)
 //app.use(projectPatternsRouter)
 /* app.use(stitchPatternsRouter)
-app.use(myProjectsRouter)
-app.use(usersRouter) */
+app.use(myProjectsRouter)*/
+ 
 
 app.use(function errorHandler(error, req, res, next) {
   let response
