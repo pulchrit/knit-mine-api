@@ -4,7 +4,7 @@ const fixtures = require('./fixtures')
 const helpers = require('./test-helpers')
 const bcrypt = require('bcryptjs')
 
-describe.only('User Endpoint', () => {
+describe('User Endpoint', () => {
     let db 
 
     // Create test data.

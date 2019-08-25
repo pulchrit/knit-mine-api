@@ -29,18 +29,18 @@ function requireAuth(req, res, next) {
         const payload = AuthService.verifyJwt(bearerToken)
 
         // Get user object from the DB. 
-        AuthService.getUserWithUserName(
+        AuthService.getUserWithEmail(
             req.app.get('db'),
-            payload.sub // the sub/subject is the user_name
+            payload.sub // the sub/subject is the user's email
         )
         .then(user => {
             // If the user isn't found in the DB, return an error.
             if (!user) {
-                return res.status(401).json({error: 'Unauthorized request'})
+                return res.status(401).json({error: 'Unauthorized request, no such user'})
             }
             // If the user is found, attach the user object to the 
             // request object so that you can use it in the other 
-            // endpoints.
+            // endpoints to pull the user id from.
             req.user = user
             next() // call the next middleware step
         })
@@ -52,7 +52,7 @@ function requireAuth(req, res, next) {
     // If the try block above fails (i.e., if verifyJwt fails),
     // return a response saying the user is not authenticated. 
     } catch(error) {
-        res.status(401).json({error: 'Unauthorized request'})
+        res.status(401).json({error: 'Unauthorized request, incorrect token'})
     }
 
 }

@@ -23,9 +23,9 @@ const AuthService = {
     // and payload supplied by the request and validated 
     // by auth-router. Use the JWT secret from the .env
     // file by way of the config file.
-    createJwt(subject, payload) {
+    createJwt(sub, payload) {
         return jwt.sign(payload, config.JWT_SECRET, {
-            subject,
+            sub,
             algorithm: 'HS256'
         })
     },
