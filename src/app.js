@@ -7,8 +7,8 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const authRouter = require('./auth/auth-router')
 const projectPatternsRouter = require('./project-patterns/project-patterns-router')
-/* const stitchPatternsRouter = require('./stitch-patterns/stitch-patterns-router')
-const myProjectsRouter = require ('./my-projects/my-projects-router')*/
+const stitchPatternsRouter = require('./stitch-patterns/stitch-patterns-router')
+/*const myProjectsRouter = require ('./my-projects/my-projects-router')*/
 const usersRouter = require('./users/users-router') 
 
 const app = express()
@@ -28,8 +28,8 @@ app.use(helmet())
 app.use(authRouter)
 app.use(usersRouter)
 app.use(projectPatternsRouter)
-/* app.use(stitchPatternsRouter)
-app.use(myProjectsRouter)*/
+app.use(stitchPatternsRouter)
+/*app.use(myProjectsRouter)*/
  
 
 app.use(function errorHandler(error, req, res, next) {
