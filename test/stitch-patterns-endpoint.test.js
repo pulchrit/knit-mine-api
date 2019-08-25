@@ -3,14 +3,14 @@ const app = require('../src/app')
 const fixtures = require('./fixtures')
 const helpers = require('./test-helpers')
 
-describe('Project-Patterns Endpoint', () => {
+describe.only('Stitch-Patterns Endpoint', () => {
     let db 
 
     // Create test data.
     const testUsers = fixtures.makeUsersArray()
     const testUser = testUsers[0]
-    const testProjectPatterns = fixtures.makeProjectPatternsArray()
-    const testProjectPattern = testProjectPatterns[0]
+    const testStitchPatterns = fixtures.makeStitchPatternsArray()
+    const testStitchPattern = testStitchPatterns[0]
 
 
     before('make knex instance', () => {
@@ -43,7 +43,7 @@ describe('Project-Patterns Endpoint', () => {
     // the primary keys sequence numbers to reset. 
     afterEach('remove all table data', () => helpers.cleanTables(db))
 
-    describe(`GET & POST /api/project-patterns/ and /api/project-patterns/:id`, () => {
+    describe(`GET & POST /api/stitch-patterns/ and /api/stitch-patterns/:id`, () => {
         
         describe('Protected endpoints for GET', () => {
             
@@ -51,16 +51,16 @@ describe('Project-Patterns Endpoint', () => {
             // Users must be added before anything else because all other 
             // tables depend on Users table.
             beforeEach('insert users', () => helpers.seedUsers(db, testUsers))
-            beforeEach('insert project patterns', () => helpers.seedProjectPatterns(db, testProjectPatterns))
+            beforeEach('insert stitch patterns', () => helpers.seedStitchPatterns(db, testStitchPatterns))
         
             const protectedEndpoints = [
               {
-                name: 'GET /api/projectPatterns/:id',
-                path: '/api/project-patterns/1',
+                name: 'GET /api/stitchPatterns/:id',
+                path: '/api/stitch-patterns/1',
               },
               {
-                name: 'GET /api/projectPatterns/',
-                path: '/api/project-patterns/',
+                name: 'GET /api/stitchPatterns/',
+                path: '/api/stitch-patterns/',
               }
             ]
         
@@ -92,17 +92,17 @@ describe('Project-Patterns Endpoint', () => {
             })  
         })
 
-        describe('Protected endpoint /api/project-patterns for POST', () => {
+        describe('Protected endpoint /api/stitch-patterns for POST', () => {
             
             // Before each and every test in this context, add the data.
             // Users must be added before anything else because all other 
             // tables depend on Users table.
             beforeEach('insert users', () => helpers.seedUsers(db, testUsers))
-            beforeEach('insert project patterns', () => helpers.seedProjectPatterns(db, testProjectPatterns))
+            beforeEach('insert stitch patterns', () => helpers.seedStitchPatterns(db, testStitchPatterns))
         
             it(`responds with 401 'Missing JWT bearer token' when no bearer token`, () => {
                 return request(app)
-                    .post('/api/project-patterns/')
+                    .post('/api/stitch-patterns/')
                     .expect(401, {error: 'Missing JWT bearer token'})
             })
     
@@ -110,7 +110,7 @@ describe('Project-Patterns Endpoint', () => {
                 const validUser = testUser
                 const invalidSecret = 'bad-secret'
                 return request(app)
-                    .post('/api/project-patterns/')
+                    .post('/api/stitch-patterns/')
                     .set('Authorization', helpers.makeAuthHeader(validUser, invalidSecret))
                     .expect(401, {error: `Unauthorized request, incorrect token`})
             })
@@ -118,28 +118,28 @@ describe('Project-Patterns Endpoint', () => {
             it('responds with 401 "Unauthorized request" when invalid subject/email in payload', () => {
                 const invalidUser = {email: 'user@notright.com', id: 1}
                 return request(app)
-                    .post('/api/project-patterns/')
+                    .post('/api/stitch-patterns/')
                     .set('Authorization', helpers.makeAuthHeader(invalidUser))
                     .expect(401, {error: `Unauthorized request, no such user`})
             })
               
         })
           
-        context(`Unhappy path, POST /api/project-patterns/`, () => {
+        context(`Unhappy path, POST /api/stitch-patterns/`, () => {
 
             // Before each and every test in this context, add the data.
             // Users must be added before anything else because all other 
             // tables depend on Users table.
             beforeEach('insert users', () => helpers.seedUsers(db, testUsers))
-            beforeEach('insert project patterns', () => helpers.seedProjectPatterns(db, testProjectPatterns))
+            beforeEach('insert stitch patterns', () => helpers.seedStitchPatterns(db, testStitchPatterns))
 
             const requiredFields = ['name', 'url']
 
             requiredFields.forEach(field => {
                 
                 const registerAttemptBody = {
-                    name: testProjectPattern.name,
-                    url: testProjectPattern.url,
+                    name: testStitchPattern.name,
+                    url: testStitchPattern.url,
                 }
 
                 it(`responds with 400 required error when '${field}' is missing`, () => {
@@ -148,7 +148,7 @@ describe('Project-Patterns Endpoint', () => {
                     delete registerAttemptBody[field]
 
                     return request(app)
-                        .post('/api/project-patterns/')
+                        .post('/api/stitch-patterns/')
                         .set('Authorization', helpers.makeAuthHeader(testUser))
                         .send(registerAttemptBody)
                         .expect(400, {
@@ -159,24 +159,24 @@ describe('Project-Patterns Endpoint', () => {
 
         })
 
-        context('Unhappy path, GET /api/project-patterns/:id', () => {
+        context('Unhappy path, GET /api/stitch-patterns/:id', () => {
             
             // Before each and every test in this context, add the data.
             // Users must be added before anything else because all other 
             // tables depend on Users table.
             beforeEach('insert users', () => helpers.seedUsers(db, testUsers))
-            beforeEach('insert project patterns', () => helpers.seedProjectPatterns(db, testProjectPatterns))
+            beforeEach('insert stitch patterns', () => helpers.seedStitchPatterns(db, testStitchPatterns))
  
             it(`responds with 404`, () => {
                 const patternId = 934
                 return request(app)
-                  .get(`/api/project-patterns/${patternId}`)
+                  .get(`/api/stitch-patterns/${patternId}`)
                   .set('Authorization', helpers.makeAuthHeader(testUser))
                   .expect(404, { error: `Pattern doesn't exist` })
               })
         })
 
-        context(`Happy path, POST /api/project-patterns/`, () => {
+        context(`Happy path, POST /api/stitch-patterns/`, () => {
             
             // Before each and every test in this context, add the data.
             // Users must be added before anything else because all other 
@@ -187,17 +187,14 @@ describe('Project-Patterns Endpoint', () => {
             it(`responds with 201, serialized pattern`, () => {
                 const newPattern = {
                     id: 1,
-                    name: "Sunny baby blanket pattern",
-                    url: "https://lifestyle.howstuffworks.com/crafts/knitting/free-knitting-patterns-for-baby-blankets2.htm",
-                    image_url: "https://images.squarespace-cdn.com/content/v1/543bf675e4b08a84cfe5ef60/1556313487737-YO00LSXYZVBOGQHE1HUC/ke17ZwdGBToddI8pDm48kFjKEMmEDO_b2ODc1-UFY4hZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVEdKrS--dBBXSNpbOi8h72cTsZ1cKPviRDH_4C971HR4ICPln5w6c1OVbkRIeOvONs/sunny+blanket.jpg?format=1000w",
-                    notes: "Quick and easy",
-                    yarn: "sport weight",
-                    needles: "US 5",
+                    name: "Andalusian Stitch",
+                    url: "https://www.simple-knitting.com/andalusian-stitch.html",                    image_url: "https://images.squarespace-cdn.com/content/v1/543bf675e4b08a84cfe5ef60/1556313487737-YO00LSXYZVBOGQHE1HUC/ke17ZwdGBToddI8pDm48kFjKEMmEDO_b2ODc1-UFY4hZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVEdKrS--dBBXSNpbOi8h72cTsZ1cKPviRDH_4C971HR4ICPln5w6c1OVbkRIeOvONs/sunny+blanket.jpg?format=1000w",
+                    notes: "Simple to work, but has a warm, comforting appearance",
                     user_id: 1
                 }
 
                 return request(app)
-                    .post('/api/project-patterns/')
+                    .post('/api/stitch-patterns/')
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .send(newPattern)
                     .expect(201)
@@ -207,13 +204,11 @@ describe('Project-Patterns Endpoint', () => {
                         expect(res.body.url).to.eql(newPattern.url)
                         expect(res.body.image_url).to.eql(newPattern.image_url)
                         expect(res.body.notes).to.eql(newPattern.notes)
-                        expect(res.body.yarn).to.eql(newPattern.yarn)
-                        expect(res.body.needles).to.eql(newPattern.needles)
-                        expect(res.headers.location).to.eql(`/api/project-patterns/${res.body.id}`)
+                        expect(res.headers.location).to.eql(`/api/stitch-patterns/${res.body.id}`)
                     })
                     .expect(res => 
                         db
-                        .from('patterns')
+                        .from('stitches')
                         .select('*')
                         .where({id: res.body.id})
                         .first()
@@ -225,19 +220,19 @@ describe('Project-Patterns Endpoint', () => {
             })
         })
 
-        context(`Happy path, GET /api/project-patterns/:id`, () => {
+        context(`Happy path, GET /api/stitch-patterns/:id`, () => {
             
             // Before each and every test in this context, add the data.
             // Users must be added before anything else because all other 
             // tables depend on Users table.
             beforeEach('insert users', () => helpers.seedUsers(db, testUsers))
-            beforeEach('insert project patterns', () => helpers.seedProjectPatterns(db, testProjectPatterns))
+            beforeEach('insert stitch patterns', () => helpers.seedStitchPatterns(db, testStitchPatterns))
             
             it(`responds with 200 and the pattern`, () => {
-                const expectedPattern = testProjectPattern
+                const expectedPattern = testStitchPattern
 
                 return request(app)
-                    .get(`/api/project-patterns/${expectedPattern.id}`)
+                    .get(`/api/stitch-patterns/${expectedPattern.id}`)
                     .set('Authorization', helpers.makeAuthHeader(testUser))
                     .expect(200, expectedPattern) 
             })

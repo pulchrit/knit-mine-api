@@ -113,6 +113,10 @@ const seedProjectPatterns = (db, projectPatterns) => {
   return db.into('patterns').insert(projectPatterns)
 }
 
+const seedStitchPatterns = (db, stitchPatterns) => {
+  return db.into('stitches').insert(stitchPatterns)
+}
+
 /* function seedMaliciousArticle(db, user, article) {
   return seedUsers(db, [user])
     .then(() =>
@@ -130,6 +134,7 @@ module.exports = {
 
   cleanTables,
   seedProjectPatterns,
+  seedStitchPatterns,
   //seedMaliciousArticle,
   seedUsers
 }
