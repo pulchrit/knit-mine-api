@@ -34,6 +34,7 @@ INSERT INTO stitches (name, url, image_url, notes, user_id)
 INSERT INTO projects (name, image, description, gift_recipient, gift_occasion, yarn, needles, pattern_id, user_id)
     VALUES 
     ('Ada''s blanket', null, 'A blanket for little Ada.', 'Ada', 'Birth', 'Lion, Carnival', 'US 7', 1, 1),
+    ('Ezzie''s blanket', null, 'A blanket for little Ezzie.', 'Ezzie', 'Birth', 'Lion, Jubilee', 'US 7', 1, 1),
     ('A hat for me', null, 'I made this hat to keep my head warm.', 'Me', 'just because', 'Malabrigo, Sunset', 'US 4', null, 2),
     ('Ezzie''s hat', null, 'A hat for my little Ezzie bear.', 'Ezzie', 'holiday 2019', 'Cascade 220 Superwash, Spring', 'US 6', null, 3);
 
@@ -41,9 +42,11 @@ INSERT INTO project_stitch (project_id, stitch_id)
     VALUES
     (1, 1),
     (1, 5),
-    (2, 2),
-    (2, 4),
-    (3, 6);
+    (2, 1),
+    (2, 5),
+    (3, 2),
+    (3, 4),
+    (4, 6);
 
 COMMIT;   
   
