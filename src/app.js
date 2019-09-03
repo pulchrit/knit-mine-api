@@ -25,6 +25,11 @@ app.use(cors(
 
 app.use(helmet())
 
+// Sets up directory to store and server static images 
+// (i.e., project images the user has uploaded)
+// Attribution: https://expressjs.com/en/starter/static-files.html
+app.use(express.static('src/my-projects/uploads'))
+
 app.use(authRouter)
 app.use(usersRouter)
 app.use(projectPatternsRouter)

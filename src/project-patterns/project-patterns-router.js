@@ -17,7 +17,7 @@ projectPatternsRouter
       req.user.id
       )
       .then(projectPatterns => {
-        res.json(ProjectPatternsService.serializePattern(projectPatterns))
+        return res.json(projectPatterns.map(ProjectPatternsService.serializePattern))
       })
       .catch(next)
   })
@@ -68,6 +68,10 @@ projectPatternsRouter
           return res.status(404).json({
             error: `Pattern doesn't exist`
           }) 
+        } else if (pattern.user_id !== req.user.id) {
+          return res.status(401).json({
+              error: `This is not one of your project patterns.`
+          })
         }
         // Save the resolved pattern object back onto the res
         // object so that you can use it in subsequent CRUD methods.

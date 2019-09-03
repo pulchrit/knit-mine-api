@@ -24,7 +24,7 @@ function requireAuth(req, res, next) {
         // Verify the JWT token. If verified, the JWT 
         // will be returned. The payload should include the
         // user_id for this authenticated user. The subject
-        // should include the user_name for this authenticated
+        // should include the email for this authenticated
         // user.
         const payload = AuthService.verifyJwt(bearerToken)
 

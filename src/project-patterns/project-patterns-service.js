@@ -6,7 +6,7 @@ const ProjectPatternsService = {
         return db
             .from('patterns')
             .select('*')
-            .where('user_id', userId)
+            .where('patterns.user_id', userId)
     },
 
     serializePattern(projectPattern) {

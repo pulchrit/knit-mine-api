@@ -8,7 +8,7 @@ const AuthService = {
     // Returns user object from database for the email.
     getUserWithEmail(db, email) {
         return db('users')
-        .where({email})
+        .where('users.email', '=', email)
         .first() // return first user in array, which should be the only user
     },
 
@@ -23,9 +23,9 @@ const AuthService = {
     // and payload supplied by the request and validated 
     // by auth-router. Use the JWT secret from the .env
     // file by way of the config file.
-    createJwt(sub, payload) {
+    createJwt(subject, payload) {
         return jwt.sign(payload, config.JWT_SECRET, {
-            sub,
+            subject,
             algorithm: 'HS256'
         })
     },

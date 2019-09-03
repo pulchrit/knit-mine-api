@@ -133,7 +133,7 @@ const makeMyProjectsArray = () => {
             yarn: "Cascade Fibers, Superwash 220, Green Heather",
             needles: "US 8, circular",
             pattern_id: 5,
-            stitch_id: [1, 3, 5]
+            stitches: [1, 3, 5]
         },
         {
             id: 2,
@@ -145,7 +145,7 @@ const makeMyProjectsArray = () => {
             yarn: "Malabrigo, Rio, Azul",
             needles: "US 4, circular",
             pattern_id: 4,
-            stitch_id: [2]
+            stitches: [2]
         },
         {
             id: 3,
@@ -157,7 +157,7 @@ const makeMyProjectsArray = () => {
             yarn: "Cascade Fibers, Superwash 220, Carnival",
             needles: "US 7, circular",
             pattern_id: 3,
-            stitch_id: []
+            stitches: []
         },
         {
             id: 4,
@@ -169,7 +169,7 @@ const makeMyProjectsArray = () => {
             yarn: "Cascade Fibers, Superwash 220, Purple Haze",
             needles: "US 7, circular",
             pattern_id: 1,
-            stitch_id: [3, 2]
+            stitches: [3, 2]
         },
         {
             id: 5,
@@ -181,14 +181,50 @@ const makeMyProjectsArray = () => {
             yarn: "Malabrigo, Rio, Strawberry Field",
             needles: "US 7, circular",
             pattern_id: 2,
-            stitch_id: [1, 4]
+            stitches: [1, 4]
         }
     ]
 }
+
+const makeProjectStitchArray = () => {
+    return [
+        {
+            project_id: 1,
+            stitch_id: 1
+        },
+        {
+            project_id: 1,
+            stitch_id: 5
+        },
+        {
+            project_id: 2,
+            stitch_id: 1
+        },
+        {
+            project_id: 2,
+            stitch_id: 5
+        },
+        {
+            project_id: 3,
+            stitch_id: 2
+        },
+        {
+            project_id: 3,
+            stitch_id: 4
+        },
+        {
+            project_id: 4,
+            stitich_id: 6
+        }
+    ]
+}
+
+
 
 module.exports = {
     makeUsersArray,
     makeProjectPatternsArray,
     makeStitchPatternsArray,
-    makeMyProjectsArray
+    makeMyProjectsArray,
+    makeProjectStitchArray
 } 

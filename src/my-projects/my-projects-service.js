@@ -3,37 +3,17 @@ const xss = require('xss')
 const MyProjectsService = {
 
     getAllProjectsForUser(db, userId) {
-        return db
+            return db
             .from('projects')
-            .select(
-                'projects.id', 
-                'projects.name', 
-                'projects.image', 
-                'projects.description', 
-                'projects.gift_recipient', 
-                'projects.gift_occasion',
-                'projects.yarn', 
-                'projects.needles', 
-                'projects.pattern_id',
-                'projects.user_id',
-                db.raw(
-                    `json_strip_nulls(
-                        json_build_object(
-                            'patterns_id', patterns.id,
-                            'patterns_name', patterns.name
-                        )
-                    ) AS "pattern"`
-                ),
-            )
-            .innerJoin('patterns', 'patterns.id', 'projects.pattern_id')
-            .where('projects.user_id', '=', userId)   
+            .select('*')            
+            .where('projects.user_id', '=', userId)     
     },
 
     // Does this need to account for user_id?????
     // I don't think so because the project_id would be linked to 
     // a particular user and there are no duplicate project_ids.
     getStitchesForProject(db, project_id) {
-            return  db
+            return db
                 .from('project_stitch')
                 .select(
                     db.raw(
@@ -45,17 +25,9 @@ const MyProjectsService = {
                 )
                 .innerJoin('stitches', 'project_stitch.stitch_id', 'stitches.id')
                 .where('project_stitch.project_id', '=', project_id)
-                .then(results => console.log("before serialize", results) || results)
-                .then(results => {
-                    const serialized = results.map(stitchesObject => 
+                .then(results => results.map(stitchesObject => 
                         MyProjectsService.serializeStitch(stitchesObject.stitches))
-                    return serialized
-                }
                 ) 
-                // If I return to the then as below, not all of the stitches are processed.
-                //.then(results => {return (Object.values(results))} )
-                //.then(results => results)
-                //.then(results => console.log("after serialize", results) || results) //?????????????????
     },
 
     serializeStitch(stitch) {
@@ -65,6 +37,34 @@ const MyProjectsService = {
         }
     },
 
+    serializePattern(pattern) {
+        return {
+            pattern_id: pattern.pattern.pattern_id,
+            pattern_name: xss(pattern.pattern.pattern_name)
+        }
+    },
+
+    // Need to separate all projects from individual projects.
+    // For all projects, we don't need stitch or project pattern information for 
+    // this route on the endpoint. We only need stitch info.  and pattern info.
+    // when we call an individual project. 
+    serializeAllProjects(project) {
+        return {
+            id: project.id,
+            name: xss(project.name),
+            image: project.image,
+            description: xss(project.description),
+            gift_recipient: xss(project.gift_recipient),
+            gift_occasion: xss(project.gift_occasion),
+            yarn: xss(project.yarn),
+            needles: xss(project.needles),
+            pattern_id: project.pattern_id,
+            user_id: project.user_id,
+            pattern: project.pattern
+        }
+    },
+
+    // Serialize an individual project for POST and GET by Id.
     async serializeProject(db, project) {
 
         return {
@@ -77,43 +77,21 @@ const MyProjectsService = {
             yarn: xss(project.yarn),
             needles: xss(project.needles),
             pattern_id: project.pattern_id,
-            //stitches: await Object.values(MyProjectsService.getStitchesForProject(db, project.id)),
-            stitches: await MyProjectsService.getStitchesForProject(db, project.id),
-            user_id: project.user_id
+            stitches: await MyProjectsService.getStitchesForProject(db, project.id) || [],
+            user_id: project.user_id,
+            pattern: await MyProjectsService.getPatternForProject(db, project.pattern_id) || '' // await???
         }
     }, 
-/* 
-    return knex("users")
-  .insert({ first_name: "John", last_name: "Doe" })
-  .returning('id')
-  .then(function (response) {
-    return knex('groups')
-      .insert({name: 'Cool Group', user_id: response[0]})
-  });*/
-
-   /*  insertProject(db, project) { 
-        return db
-            .insert(project)
-            .into('projects')
-            .returning('*')
-            .then(rows => rows[0])
-            .then(project => {
-                return db('project_stitch')
-                .insert({project_id: response[0].id, stitch_id: })
-            })
-            
-    },  */
-
 
     insertProject(db, project) {
         return db
             .insert(project)
             .into('projects')
             .returning('*')
-            .then(rows => {return rows[0]})
-            /* .then(project => 
-                MyProjectsService.getById(db, pattern.id)
-            ) */
+            .then(rows => rows[0]) 
+            .then(project => 
+                MyProjectsService.getProjectById(db, project.id)
+            ) 
     }, 
 
     insertProjectStitch(db, project_id, stitch_id) {
@@ -125,21 +103,39 @@ const MyProjectsService = {
             .into('project_stitch')
             .returning('*')
             .then(rows => {return rows})
-            //getById here instead of above????
     },
 
-    getById(db, id) {
+    getPatternForProject(db, id) {
+        if (!id) {
+            return ''
+        } else {
+            return db
+                .from('patterns')
+                .select(
+                    db.raw(
+                        `json_strip_nulls(
+                            json_build_object(
+                                'pattern_id', patterns.id,
+                                'pattern_name', patterns.name
+                            )
+                        ) AS "pattern"`
+                    )
+                )
+                .where('id', id)
+                .first() 
+                .then(pattern => MyProjectsService.serializePattern(pattern))  
+        }                     
+    },
+
+    // getProjectById only gets the project from the project table. We get and serialize
+    // the pattern and stitches (if there are any) when we serialize the project
+    // for POST and GET /:id. 
+    getProjectById(db, id) {
         return db
-            .from('patterns')
+            .from('projects')
             .select('*')
             .where('id', id)
-            .first();
-    },
-
-    deletePattern(db, id) {
-        return db('patterns')
-            .where({id})
-            .delete()
+            .first()
     }
 }
 

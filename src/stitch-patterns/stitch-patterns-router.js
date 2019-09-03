@@ -17,7 +17,7 @@ stitchPatternsRouter
       req.user.id
       )
       .then(stitchPatterns => {
-        res.json(StitchPatternsService.serializePattern(stitchPatterns))
+        return res.json(stitchPatterns.map(StitchPatternsService.serializePattern))
       })
       .catch(next)
   })
@@ -66,6 +66,10 @@ stitchPatternsRouter
           return res.status(404).json({
             error: `Pattern doesn't exist`
           }) 
+        } else if (pattern.user_id !== req.user.id) {
+          return res.status(401).json({
+              error: `This is not one of your stitches.`
+          })
         }
         // Save the resolved pattern object back onto the res
         // object so that you can use it in subsequent CRUD methods.

@@ -1,40 +1,67 @@
 const express = require('express')
+//const bodyParser = require('body-parser')
+const formidableMiddleware = require('express-formidable');
+//const fs = require('fs') // Node FileSystem
 const path = require('path')
 const MyProjectsService = require('./my-projects-service')
 const {requireAuth} = require('../middleware/jwt-auth')
 
 const myProjectsRouter = express.Router()
 const jsonBodyParser = express.json()
-const rawBodyParser = express.raw({limit: '10mb', type: 'image/*'})
+
+// Save options and events for formidable multipart form parser.
+// This will parse the myProjects form so that the user images 
+// are uploaded and available. 
+// Attributions: 
+// https://github.com/utatti/express-formidable
+// https://expressjs.com/en/starter/static-files.html (see app.js)
+const formidableOptions = {
+    uploadDir: '/uploads',
+}
+const formidableEvents = [
+  {
+    event: 'fileBegin',
+    action: function (req, res, next, name, file) { 
+      file.path = __dirname + '/uploads/' + file.name;
+     }
+  }
+]
+
 
 myProjectsRouter
   .route('/api/my-projects/')
   .all(requireAuth)
   .get(jsonBodyParser, (req, res, next) => {
+    
     MyProjectsService.getAllProjectsForUser(
         req.app.get('db'), 
         // Get current user from req object. The current user object
         // was saved to the req object when requireAuth() ran. 
         req.user.id
-        )
-        .then(myProjects => myProjects.map(MyProjectsService.serializeProject))
-        .then(myCompleteSerializedProjects => res.json(myCompleteSerializedProjects)) 
-        .catch(next)
-  })
-  .post(jsonBodyParser, rawBodyParser, (req, res, next) => {
+    )
+    .then(myProjects => {
+        return res.json(myProjects.map(MyProjectsService.serializeAllProjects))
+    })
+    .catch(next)
+  }) 
+  // Use express-formidable as the middleware to parse the multipart form data and image
+  .post(formidableMiddleware(formidableOptions, formidableEvents), (req, res, next) => {
 
-    const stitches = req.body.stitches || []
+    // Creates array of stitch ids submitted by client.
+    // And converts them to integers for insertion in to database.
+    let stitches = req.fields.stitch_patterns.split(',') 
+    stitches = parseInt(...stitches) || []
 
     const newProject = {
-      name: req.body.name,
-      image: req.body.image,
-      description: req.body.description,
-      gift_recipient: req.body.recipient,
-      gift_occasion: req.body.occasion,
-      yarn: req.body.yarn,
-      needles: req.body.needles,
-      pattern_id: req.body.pattern_id,
-      user_id: req.user.id
+      name: req.fields.name,
+      image: req.files.image,
+      description: req.fields.description,
+      gift_recipient: req.fields.gift_recipient,
+      gift_occasion: req.fields.gift_occasion,
+      yarn: req.fields.yarn,
+      needles: req.fields.needles,
+      pattern_id: parseInt(req.fields.project_pattern) || null,
+      user_id: req.user.id 
     }
 
     // Check for required element: name.
@@ -48,15 +75,22 @@ myProjectsRouter
       req.app.get('db'),
       newProject
     )
-    .then(project => {
-        return stitches.forEach(stitch => 
-            MyProjectsService.insertProjectStitch(
-                req.app.get('db'),
-                project.id,
-                stitch
-            )
-        ) || project
+    // If there are any stitches to insert, insert them. 
+    // Need async/await to ensure that all stitches are inserted before
+    // the rest of the function executes.
+    .then(async project => {
+      if (stitches.length) {
+        return await stitches.forEach(stitch => 
+          MyProjectsService.insertProjectStitch(
+              req.app.get('db'),
+              project.id,
+              stitch
+          )) || project
+      }
+      return project
     })
+    // Need async/await again here to ensure that serializeProject returns
+    // completely (it calls another function that we need to wait for).
     .then(async project => {
         return res
           .status(201)
@@ -64,66 +98,30 @@ myProjectsRouter
           .json(await MyProjectsService.serializeProject(req.app.get('db'), project))
           || project
     })
-   /*  .then(stitches => {
-        res
-            .status(201)
-            .json(stitches)
-    }) */
     .catch(next)
   })
   
-  /* projectPatternsRouter
-    .route('/api/project-patterns/:id')
-    .all(requireAuth)
-    .all((req, res, next) => {
-      ProjectPatternsService.getById(
+  myProjectsRouter
+    .route('/api/my-projects/:id')
+    .get(requireAuth, (req, res, next) => {
+      MyProjectsService.getProjectById(
         req.app.get('db'),
         req.params.id
       )
-      /* ???? .then(serializedProjects => serializedProjects.map(project => {
-                const stitches = MyProjectsService.getStitchesForProject(
-                    req.app.get('db'),
-                    project.id
-                )
-                console.log('stitches from get stitches for project:', stitches)
-                //const serializedStitches = stitches.map(MyProjectsService.serializeStitch)
-                return {
-                    ...project,
-                    stitches: stitches
-                }
+      .then(async project => {
+        if (!project) {
+            return res.status(404).json({
+                error: `Project doesn't exist`
+            }) 
+        } else if (project.user_id !== req.user.id) {
+            return res.status(401).json({
+                error: `This is not one of your projects.`
             })
-        ) */
-        // ???? .then(serializedProjects => res.json(serializedProjects))
-      /*.then(pattern => {
-        if (!pattern) {
-          return res.status(404).json({
-            error: `Pattern doesn't exist`
-          }) 
         }
-        // Save the resolved pattern object back onto the res
-        // object so that you can use it in subsequent CRUD methods.
-        res.pattern = pattern
-        next()
-      })
-      .catch(next)
-    })
-    .get((req, res, next) => {
-        // We already have this resolved pattern from the all() method,
-        // so we can just return it here to the get() method.
-        res.json(ProjectPatternsService.serializePattern(res.pattern))
-    })
-    // Adding the delete function so that it's in place for future
-    // iteration
-    .delete((req, res, next) => {
-      ProjectPatternsService.deletePattern(
-        req.app.get('db'),
-        req.params.id
-      )
-      .then(numRowsAffected => {
-        res.status(204).end()
+        return res.json(await MyProjectsService.serializeProject(req.app.get('db'), project))
       })
       .catch(next)
     })
     
- */
+ 
   module.exports = myProjectsRouter

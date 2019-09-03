@@ -3,7 +3,7 @@ const app = require('../src/app')
 const fixtures = require('./fixtures')
 const helpers = require('./test-helpers')
 
-describe('Project-Patterns Endpoint', () => {
+describe.only('Project-Patterns Endpoint', () => {
     let db 
 
     // Create test data.
