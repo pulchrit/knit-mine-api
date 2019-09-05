@@ -10,3 +10,4 @@ module.exports = {
     "password": process.env.PROD_MIGRATION_DB_PASS,
     "ssl": true
 }
+
