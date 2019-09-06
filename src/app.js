@@ -18,7 +18,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 }))
 
 const corsOptions = {
-  origin: "https://knit-mine-app.now.sh/",
+  origin: "https://knit-mine-app.now.sh",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: 'CONTENT-TYPE,AUTHORIZATION',
   preflightContinue: true,
