@@ -25,7 +25,7 @@ const corsOptions = {
   //optionsSuccessStatus: 204 // Provides a status code for a successful OPTIONS request to legacy browsers
 }
 
-app.options('*', cors(corsOptions)) // Enable pre-flight requests for all request endpoints
+//app.options('*', cors(corsOptions)) // Enable pre-flight requests for all request endpoints
 
 app.use(cors(corsOptions)) // Applies cors middleware
 
