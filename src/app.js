@@ -18,12 +18,13 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 }))
 
 const corsOptions = {
-  origin: "https://quiet-shelf-50620.herokuapp.com/",
+  origin: "https://knit-mine-app.now.sh/",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: 'CONTENT-TYPE,AUTHORIZATION',
   preflightContinue: true,
   optionsSuccessStatus: 204
 }
+console.log(corsOptions)
 app.options('*', cors(corsOptions)) // Should enable pre-flight requests
 app.use(cors(corsOptions))
 
