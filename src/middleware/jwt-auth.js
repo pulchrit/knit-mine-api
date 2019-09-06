@@ -5,7 +5,7 @@ const AuthService = require('../auth/auth-service')
 function requireAuth(req, res, next) {
     
     // Get the AuthToken from the Authorization header
-    const authToken = req.get('Authorization') || ''
+    const authToken = req.get('authorization') || ''
 
     let bearerToken
     // Change authToken to lower case and check if it 
