@@ -20,7 +20,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 const corsOptions = {
   origin: CLIENT_ORIGIN
 }
-
+app.options('*', cors(corsOptions)) // Should enable pre-flight requests
 app.use(cors(corsOptions))
 
 app.use(helmet())
