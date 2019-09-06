@@ -18,7 +18,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 }))
 
 const corsOptions = {
-  origin: CLIENT_ORIGIN,
+  origin: "https://quiet-shelf-50620.herokuapp.com/",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: 'CONTENT-TYPE,AUTHORIZATION',
   preflightContinue: true,
