@@ -18,15 +18,16 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 }))
 
 const corsOptions = {
-  origin: "https://knit-mine-app.now.sh",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: 'CONTENT-TYPE,AUTHORIZATION',
-  preflightContinue: true,
-  optionsSuccessStatus: 204
+  origin: "https://knit-mine-app.now.sh", // Client origin, will set Access-Control-Allow-Origin header
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Apply to all request methods, this is also the default setting
+  allowedHeaders: 'CONTENT-TYPE,AUTHORIZATION', // Specify Access-Control-Allow_Headers base on what your app uses
+  preflightContinue: true, // Pass the CORS preflight response to the next handler
+  optionsSuccessStatus: 204 // Provides a status code for a successful OPTIONS request to legacy browsers
 }
-console.log(corsOptions)
-app.options('*', cors(corsOptions)) // Should enable pre-flight requests
-app.use(cors(corsOptions))
+
+app.options('*', cors(corsOptions)) // Enable pre-flight requests for all request endpoints
+
+app.use(cors(corsOptions)) // Applies cors middleware
 
 app.use(helmet())
 
