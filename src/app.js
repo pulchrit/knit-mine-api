@@ -18,7 +18,11 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 }))
 
 const corsOptions = {
-  origin: CLIENT_ORIGIN
+  origin: CLIENT_ORIGIN,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: 'CONTENT-TYPE,AUTHORIZATION',
+  preflightContinue: true,
+  optionsSuccessStatus: 204
 }
 app.options('*', cors(corsOptions)) // Should enable pre-flight requests
 app.use(cors(corsOptions))
