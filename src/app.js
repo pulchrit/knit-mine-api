@@ -22,7 +22,7 @@ const corsOptions = {
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Apply to all request methods, this is also the default setting
   //allowedHeaders: "origin,content-type,authorization", // Specify Access-Control-Allow_Headers base on what your app uses
   preflightContinue: true, // Pass the CORS preflight response to the next handler
-  optionsSuccessStatus: 204 // Provides a status code for a successful OPTIONS request to legacy browsers
+  //optionsSuccessStatus: 204 // Provides a status code for a successful OPTIONS request to legacy browsers
 }
 
 app.options('*', cors(corsOptions)) // Enable pre-flight requests for all request endpoints
