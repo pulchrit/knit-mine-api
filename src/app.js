@@ -17,11 +17,11 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
   skip: () => NODE_ENV === 'test',
 }))
 
-app.use(cors(
-    {
-        origin: CLIENT_ORIGIN
-    }
-))
+const corsOptions = {
+  origin: CLIENT_ORIGIN
+}
+
+app.use(cors(corsOptions))
 
 app.use(helmet())
 
