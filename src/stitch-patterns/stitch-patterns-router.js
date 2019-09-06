@@ -13,7 +13,7 @@ stitchPatternsRouter
     StitchPatternsService.getAllStitchPatternsForUser(
       req.app.get('db'), 
       // Get current user from req object. The current user object
-      // was saved to the req object when requireAuth() ran. 
+      // was saved to the req object when requireAuth() ran.   
       req.user.id
       )
       .then(stitchPatterns => {
