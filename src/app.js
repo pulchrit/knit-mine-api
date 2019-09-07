@@ -8,6 +8,7 @@ const { NODE_ENV } = require('./config')
 const authRouter = require('./auth/auth-router')
 const projectPatternsRouter = require('./project-patterns/project-patterns-router')
 const stitchPatternsRouter = require('./stitch-patterns/stitch-patterns-router')
+const signS3Router = require('./sign-s3/sign-s3-router')
 const myProjectsRouter = require ('./my-projects/my-projects-router')
 const usersRouter = require('./users/users-router') 
 
@@ -18,7 +19,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 }))
 
 const corsOptions = {
-  origin: "https://knit-mine-app.now.sh", // Client origin, will set Access-Control-Allow-Origin header
+  origin: CLIENT_ORIGIN, //"https://knit-mine-app.now.sh", // Client origin, will set Access-Control-Allow-Origin header
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Apply to all request methods, this is also the default setting
   //allowedHeaders: "origin,content-type,authorization", // Specify Access-Control-Allow_Headers base on what your app uses
   preflightContinue: true, // Pass the CORS preflight response to the next handler
@@ -34,12 +35,13 @@ app.use(helmet())
 // Sets up directory to store and server static images 
 // (i.e., project images the user has uploaded)
 // Attribution: https://expressjs.com/en/starter/static-files.html
-app.use(express.static('src/my-projects/uploads'))
+//app.use(express.static('src/my-projects/uploads'))
 
 app.use(authRouter)
 app.use(usersRouter)
 app.use(projectPatternsRouter)
 app.use(stitchPatternsRouter)
+app.use(signS3Router)
 app.use(myProjectsRouter)
  
 
