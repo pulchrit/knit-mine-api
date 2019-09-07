@@ -1,43 +1,10 @@
 const express = require('express')
-const formidableMiddleware = require('express-formidable');
-const uuidv4 = require('uuid/v4')
-const fs = require('fs') // Node FileSystem
 const path = require('path')
 const MyProjectsService = require('./my-projects-service')
 const {requireAuth} = require('../middleware/jwt-auth')
 
 const myProjectsRouter = express.Router()
 const jsonBodyParser = express.json()
-
-// Save options and events for formidable multipart form parser.
-// This will parse the myProjects form so that the user images 
-// are uploaded and available. 
-// Files will be renamed with a UUID as file name, so there is no
-// confusion when the server serves a file by name.
-// Attributions: 
-// https://github.com/utatti/express-formidable
-// https://stackoverflow.com/questions/8359902/how-to-rename-files-parsed-by-formidable
-// https://expressjs.com/en/starter/static-files.html (see app.js)
-const formidableOptions = {
-    uploadDir: '/uploads',
-}
-const formidableEvents = [
-  { // Moves images into /uploads/ folder.
-    event: 'fileBegin',
-    action: function (req, res, next, name, file) { 
-      file.path = __dirname + '/uploads/' + file.name;
-     }
-  },
-  { // Renames the file with a UUID.
-    event: 'file',
-    action: function (req, res, next, name, file) { 
-      file.name = uuidv4() + '.JPG'
-      // Slices off the old file name from the old path and rebuilds a new path with the new file name.
-      fs.rename(file.path, file.path.split("/").slice(0, -1).join('/') + '/' + file.name, (error) => error)
-     }
-  } 
-]
-
 
 myProjectsRouter
   .route('/api/my-projects/')
@@ -55,23 +22,22 @@ myProjectsRouter
     })
     .catch(next)
   }) 
-  // Use express-formidable as the middleware to parse the multipart form data and image
-  .post(formidableMiddleware(formidableOptions, formidableEvents), (req, res, next) => {
-
-    // Creates array of stitch ids submitted by client.
-    // And converts them to integers for insertion in to database.
-    const stitches = req.fields.stitch_patterns.split(',')
+  .post(jsonBodyParser, (req, res, next) => {
+    
+    // Get stitches separately as they need to go into a different table than
+    // the rest of the project.
+    const stitches = req.body.stitch_patterns
 
     const newProject = {
-      name: req.fields.name,
-      image: req.files.image,
-      description: req.fields.description,
-      gift_recipient: req.fields.gift_recipient,
-      gift_occasion: req.fields.gift_occasion,
-      yarn: req.fields.yarn,
-      needles: req.fields.needles,
-      pattern_id: parseInt(req.fields.project_pattern) || null,
-      user_id: req.user.id 
+      name: req.body.name,
+      image: req.body.image,
+      description: req.body.description,
+      gift_recipient: req.body.gift_recipient,
+      gift_occasion: req.body.gift_occasion,
+      yarn: req.body.yarn,
+      needles: req.body.needles,
+      pattern_id: parseInt(req.body.project_pattern) || null,
+      user_id: req.user.id
     }
 
     // Check for required element: name.
