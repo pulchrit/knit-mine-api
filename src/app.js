@@ -14,29 +14,26 @@ const usersRouter = require('./users/users-router')
 
 const app = express()
 
+// Morgan is a package for status logging.
 app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
   skip: () => NODE_ENV === 'test',
 }))
 
+// Cors is a package that helps set up CORS options properly.
 const corsOptions = {
-  origin: /* CLIENT_ORIGIN, */ "https://knit-mine-app.now.sh", // Client origin, will set Access-Control-Allow-Origin header
+  origin: CLIENT_ORIGIN,  //"https://knit-mine-app.now.sh", // Client origin, will set Access-Control-Allow-Origin header
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Apply to all request methods, this is also the default setting
-  //allowedHeaders: "origin,content-type,authorization", // Specify Access-Control-Allow_Headers base on what your app uses
   preflightContinue: true, // Pass the CORS preflight response to the next handler
-  //optionsSuccessStatus: 204 // Provides a status code for a successful OPTIONS request to legacy browsers
 }
 
 app.options('*', cors()) // Enable pre-flight requests for all request endpoints
 
 app.use(cors(corsOptions)) // Applies cors middleware
 
+// Helmet is a package for securing HTTP headers.
 app.use(helmet())
 
-// Sets up directory to store and server static images 
-// (i.e., project images the user has uploaded)
-// Attribution: https://expressjs.com/en/starter/static-files.html
-//app.use(express.static('src/my-projects/uploads'))
-
+// Endpoint routers
 app.use(authRouter)
 app.use(usersRouter)
 app.use(projectPatternsRouter)
