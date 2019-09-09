@@ -1,5 +1,7 @@
 # Knit Mine API
 
+Node Express Server using PostgreSQL database. 
+
 ## Endpoints
 
 ### Registering a user: /api/users/ 
@@ -39,7 +41,9 @@ Errors:
 
 Success: 
 - 200
-```{"authToken":"<JWT Auth Token will appear here>"}```
+```
+{"authToken":"<JWT Auth Token will appear here>"}
+```
 
 ### Viewing all stitches by user: /api/stitch-patterns/
 - Ensures user is logged in by checking for valid JWT Auth Token in header. 
@@ -48,7 +52,8 @@ Success:
 HTTP Request: GET
 
 Headers: 
-- Authorization header with JWT Auth Token for this user. `"Authorization": "bearer <JWT Auth Token here>"`
+- Authorization header with JWT Auth Token for this user. For example: 
+`"Authorization": "bearer <JWT Auth Token here>"`
 
 Parameters: 
  - None, user id will be acquired from JWT Auth Token
@@ -60,36 +65,96 @@ Errors:
 
 Success: 
 - 200
-```{
+
+```
+[
+    {
+        "id":7,
+        "name":
+        "Daisy Stitch",
+        "url":"https://www.knittingstitchpatterns.com/2014/08/daisy-stitch.html",
+        "image_url":"https://4.bp.blogspot.com/-S_HevcA4TPY/Vh5RytTPbJI/AAAAAAAAKfw/d2VdcpOXK_c/s1600/Daisy%2Bknitting%2BStitch.jpg",
+        "notes":"Remember to knit loosely!",
+        "user_id":3
+    },
+    {...},
+    {...}
+]
+```
+- Empty array will be returned if users has not saved any stitch patterns.
+
+
+### Adding a stitch by user: /api/stitch-patterns/
+- Ensures user is logged in by checking for valid JWT Auth Token in header. 
+- Allows a user to add a stitch pattern to the database under their user id. 
+
+HTTP Request: POST
+
+Headers: 
+- Authorization header with JWT Auth Token for this user. For example: 
+`"Authorization": "bearer <JWT Auth Token here>"`
+
+Parameters: 
+ - Name, required, a name for this stitch
+ - Url, required, link to the webpage for this stitch
+ - Image_url, link to the image for this stitch
+ - Notes, any notes the user wants to include
+ - (User id will be acquired from JWT Auth Token)
+
+Errors: 
+- 401, `Missing JWT bearer token`
+- 401, `Unauthorized request, no such user`
+- 401, `Unauthorized request, incorrect token`
+- 400, `Missing 'name/url' in request body`
+
+Success: 
+- 201
+
+```
+{
     "id":7,
     "name":"Daisy Stitch",
     "url":"https://www.knittingstitchpatterns.com/2014/08/daisy-stitch.html",
     "image_url":"https://4.bp.blogspot.com/-S_HevcA4TPY/Vh5RytTPbJI/AAAAAAAAKfw/d2VdcpOXK_c/s1600/Daisy%2Bknitting%2BStitch.jpg",
-    "notes":"Remember to knit loosely!","user_id":3
-}```
-- Empty array will be returned if users has not saved any stitch patterns.
+    "notes":"Remember to knit loosely!",
+    "user_id":3
+}
+```
 
-
-### Viewing and adding stitches: /api/stitch-patterns/, /api/stitch-patterns/:id,
+### Viewing a stitch by user and stitch id: /api/stitch-patterns/:id
 - Ensures user is logged in by checking for valid JWT Auth Token in header. 
-- Allows user to view all of their stitch patterns or an individual stitch pattern by id. 
-- Allows a user to add a stitch pattern to the database under their user id. 
+- Allows user to view an individual stitch pattern by id. 
 
-HTTP Request: GET, POST
+HTTP Request: GET
 
 Headers: 
-- Authorization header with JWT Auth Token for this user.
+- Authorization header with JWT Auth Token for this user. For example: 
+`"Authorization": "bearer <JWT Auth Token here>"`
 
 Parameters: 
- - None, user id will be acquired from JWT Auth Token
+ - Stitch pattern id param from route/path. For example: 
+
+ `https://knit-mine-app/now.sh/stitch-patterns/7`
 
 Errors: 
-- 400, `Missing 'email/password' in request body`
-- 400, `Incorrect email or password`
+- 401, `Missing JWT bearer token`
+- 401, `Unauthorized request, no such user`
+- 401, `Unauthorized request, incorrect token`
+- 404, `Pattern doesn't exist`
+- 401, `This is not one of your stitches.`
 
 Success: 
 - 200
-```{"authToken":"<JWT Auth Token will appear here>"}```
+```
+{
+    "id":7,
+    "name":"Daisy Stitch",
+    "url":"https://www.knittingstitchpatterns.com/2014/08/daisy-stitch.html",
+    "image_url":"https://4.bp.blogspot.com/-S_HevcA4TPY/Vh5RytTPbJI/AAAAAAAAKfw/d2VdcpOXK_c/s1600/Daisy%2Bknitting%2BStitch.jpg",
+    "notes":"Remember to knit loosely!",
+    "user_id":3
+}
+```
 ## Scripts
 
 Start the application `npm start`
