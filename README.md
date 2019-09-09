@@ -2,8 +2,7 @@
 
 ## Endpoints
 
-### Registering a user
-Endpoint: /api/users/ 
+### Registering a user: /api/users/ 
 
 HTTP Request: POST
 
@@ -13,8 +12,16 @@ Parameters:
 - password: required, 8+ chars, including one number
 
 Errors: 
-- 400, Missing required field
-- 400, Password must be 8-72 characters and contian one number
+- 400, `Missing 'name/email/password' in request body`
+- 400, `Password must be between 8 and 72 characters long`
+- 400, `Password must contain at least one number`
+- 400, `Email is already in use`
+
+Success: 
+HTTP Status: 201
+```
+{"id":3,"name":"Demo","email":"demo@demo.com"}
+```
 
 ## Scripts
 
