@@ -1,17 +1,17 @@
-# Express Boilerplate!
+#Knit Mine API
 
-This is a boilerplate project used for starting new projects!
+## Endpoints
 
-## Set up
-
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
-
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+### Registering a user
+Endpoint: /api/users/ 
+HTTP Request: POST
+Parameters: 
+- name: required
+- email: required, will be used as user name for login
+- password: required, 8+ chars, including one number
+Errors: 
+- 400, Missing required field
+- 400, Password must be 8-72 characters and contian one number
 
 ## Scripts
 
@@ -21,6 +21,8 @@ Start nodemon for the application `npm run dev`
 
 Run the tests `npm test`
 
-## Deploying
+Deploy the application `npm run deploy`
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+## Server location
+
+This server is deployed on Heroku at https://quiet-shelf-50620.herokuapp.com/ and uses a PostgreSQL database also deployed on Heroku. 
