@@ -14,7 +14,7 @@ INSERT INTO patterns (name, url, image_url, notes, yarn, needles, user_id)
     ('Ribbed Hat', 'https://www.allfreeknitting.com/Ribbed-Hats/Classic-Ribbed-Knit-Hat-Pattern', 'https://irepo.primecp.com/2017/06/335915/Classic-Ribbed-Knit-Hat-Pattern_Large500_ID-2294781.png?v=2294781', 'Simple ribbed hat. Knits up quickly.', 'worsted weight', 'US 6', 1),
     ('Transverse cowl', 'https://www.instructables.com/id/Transverse-Cowl-Knitting-Pattern/', 'https://cdn.instructables.com/FRT/Y5FT/GX3LR320/FRTY5FTGX3LR320.LARGE.jpg?auto=webp&frame=1&width=325&fit=bounds', 'Easy to knit, but makes a fancy scarf.', 'Chunky weight', 'US 10', 1),
     ('Mesh scarf', 'http://knitonesmocktoo.com/2014/05/17/mesh-scarf-a-free-pattern/', 'http://knitonesmocktoo.com/wp-content/uploads/2014/05/001-185-615x1024.jpg', 'Beautiful scarf, especially with jewel-tone yarn.', 'Lace weight', 'US 3', 1),
-    ('Mossy Jacket', 'http://fpea.blogspot.com/2007/01/free-pattern-friday-mossy-jacket.html', 'http://farm1.static.flickr.com/134/345404969_719fcb4965.jpg', 'Will keep the little ones warm.', 'Worsted', 'US 9, US 10', 1);
+    ('Mossy Jacket', 'http://fpea.blogspot.com/2007/01/free-pattern-friday-mossy-jacket.html', 'http://farm1.static.flickr.com/134/345404969_719fcb4965.jpg', 'Will keep the little ones warm.', 'Worsted', 'US 9 and US 10', 1);
 
 INSERT INTO stitches (name, url, image_url, notes, user_id) 
     VALUES 
