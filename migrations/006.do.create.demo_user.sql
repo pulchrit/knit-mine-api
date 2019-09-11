@@ -40,7 +40,7 @@ INSERT INTO project_stitch (project_id, stitch_id)
     (2, 4),
     (3, 4),
     (3, 5),
-    (4, 4)
+    (4, 4),
     (5, 5);
 
 COMMIT;  
