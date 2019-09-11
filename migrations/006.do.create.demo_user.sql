@@ -19,7 +19,7 @@ INSERT INTO patterns (name, url, image_url, notes, yarn, needles, user_id)
 INSERT INTO stitches (name, url, image_url, notes, user_id) 
     VALUES 
     ('Rainbow feather and fan', 'https://www.knittingstitchpatterns.com/2017/09/rainbow-feather-and-fan.html', 'https://1.bp.blogspot.com/-0DP1IQa5OLM/Wbw8fhCL86I/AAAAAAAATuI/oKa72AcMXkQd2Z-qoKuxaW8g_4Z5W4R5ACLcBGAs/s1600/Rainbow-Feather-and-Fan-st.jpg', 'Ada and Ezzie will love this.', 1),
-    ('Daisy stitch', 'https://www.knittingstitchpatterns.com/2014/08/daisy-stitch.html', 'https://4.bp.blogspot.com/-S_HevcA4TPY/Vh5RytTPbJI/AAAAAAAAKfw/d2VdcpOXK_c/s1600/Daisy%2Bknitting%2BStitch.jpg', 'Be sure to knit loosely!!!', 1),
+    ('Daisy stitch', 'https://www.knittingstitchpatterns.com/2014/08/daisy-stitch.html', 'https://4.bp.blogspot.com/-S_HevcA4TPY/Vh5RytTPbJI/AAAAAAAAKfw/d2VdcpOXK_c/s1600/Daisy%2Bknitting%2BStitch.jpg', 'Be sure to knit loosely', 1),
     ('Moss stitch', 'https://www.thesprucecrafts.com/learn-about-the-moss-stitch-2117122', 'https://www.thesprucecrafts.com/thmb/S15a_qgewRD-79DmLawG60RdbEk=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/MossStitch_3-5ad11494642dca0036e38188.jpg', 'Easy reversible stitch pattern', 1),
     ('Ribbed stitch', 'https://www.simple-knitting.com/rib-stitch.html', 'https://www.simple-knitting.com/images/2X2RibStitch1.jpg', 'Basic ribbed stitch. Extrapolate as required.', 1),
     ('Stockinette stitch', 'https://sheepandstitch.com/library/stockinette-stitch-knitting-for-beginners/', 'https://sheepandstitch.com/wp-content/uploads/2018/12/stockinette-stitch-knitting-front-back.jpg', 'The simplest stitch. You can go so fast when working in the round.', 1);
@@ -30,7 +30,7 @@ INSERT INTO projects (name, image, description, gift_recipient, gift_occasion, y
     ('Peter''s hat', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/peters_hat.jpeg', 'A hat for Uncle Peter.', 'Uncle Peter', 'Just because', 'Lion, Jade, worsted', 'US 7', 2, 1),
     ('A hat for Andrew', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/my_hat.jpeg', 'To keep him warm.', 'Andrew', 'Just because', 'Malabrigo, Sunset, sport', 'US 4', null, 1),
     ('Ezzie''s hat', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/Ezzies_hat.jpeg', 'A hat for my little Ezzie bear.', 'Ezzie', 'holiday 2019', 'Cascade 220 Superwash, Spring, chunky', 'US 8', 2, 1)
-    ('My scarf', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/scarf.jpeg', 'My neck is cold!', 'me', 'just because', 'Mirasol Sulka, Peppermit, Chunky', 'US 14', 4, 1);
+    ('My scarf', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/scarf.jpeg', 'My neck is cold.', 'me', 'just because', 'Mirasol Sulka, Peppermit, Chunky', 'US 14', 4, 1);
 
 INSERT INTO project_stitch (project_id, stitch_id)
     VALUES
