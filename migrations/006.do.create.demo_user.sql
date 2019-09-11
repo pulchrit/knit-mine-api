@@ -5,9 +5,8 @@ BEGIN;
 TRUNCATE project_stitch, projects, stitches, patterns, users RESTART IDENTITY CASCADE;
 
 
-INSERT INTO users (name, email, password )
-    VALUES
-    ('Demo', 'demo@demo.com', '$2a$12$p0bQAh5ekjQ900Eo6NfjhOYvjvavHUcdVPDyq/TjNnstV8XWPIm8q');
+INSERT INTO users (name, email, password)
+    VALUES ('Demo', 'demo@demo.com', '$2a$12$p0bQAh5ekjQ900Eo6NfjhOYvjvavHUcdVPDyq/TjNnstV8XWPIm8q');
 
 INSERT INTO patterns (name, url, image_url, notes, yarn, needles, user_id)
     VALUES
