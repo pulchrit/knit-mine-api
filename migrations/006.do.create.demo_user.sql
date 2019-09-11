@@ -30,7 +30,7 @@ INSERT INTO projects (name, image, description, gift_recipient, gift_occasion, y
     ('Peter''s hat', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/peters_hat.jpeg', 'A hat for Uncle Peter.', 'Uncle Peter', 'Just because', 'Lion, Jade, worsted', 'US 7', 2, 1),
     ('A hat for Andrew', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/my_hat.jpeg', 'To keep him warm.', 'Andrew', 'Just because', 'Malabrigo, Sunset, sport', 'US 4', null, 1),
     ('Ezzie''s hat', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/Ezzies_hat.jpeg', 'A hat for my little Ezzie bear.', 'Ezzie', 'holiday 2019', 'Cascade 220 Superwash, Spring, chunky', 'US 8', 2, 1)
-    ('My scarf', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/scarf.jpeg', 'My neck is cold!', "me", 'just because', 'Mirasol Sulka, Peppermit, Chunky', 'US 14', 4, 1);
+    ('My scarf', 'https://knit-mine-uploads.s3-us-west-2.amazonaws.com/scarf.jpeg', 'My neck is cold!', 'me', 'just because', 'Mirasol Sulka, Peppermit, Chunky', 'US 14', 4, 1);
 
 INSERT INTO project_stitch (project_id, stitch_id)
     VALUES
