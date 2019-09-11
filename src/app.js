@@ -21,7 +21,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 
 // Cors is a package that helps set up CORS options properly.
 const corsOptions = {
-  origin: "https://knit-mine-app.now.sh", //CLIENT_ORIGIN,  //"https://knit-mine-app.now.sh", // Client origin, will set Access-Control-Allow-Origin header
+  origin: "https://knit-mine-app.now.sh", //CLIENT_ORIGIN, // Client origin, will set Access-Control-Allow-Origin header
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Apply to all request methods, this is also the default setting
   preflightContinue: true, // Pass the CORS preflight response to the next handler
 }
